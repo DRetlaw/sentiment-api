@@ -30,4 +30,25 @@ uvicorn app.main:app --reload
 http://127.0.0.1:8000/docs
 
 
+Add in .dockerignore
+.venv
+__pycache__
+*.pyc
+.git
+.gitignore
+.env
+
+Add in Dockerfile
+FROM python:3.12-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY app ./app
+EXPOSE 7860
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "7860"]
+
+
+docker build -t sentiment-api .
+
+docker images
 
