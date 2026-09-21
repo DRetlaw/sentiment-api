@@ -30,6 +30,18 @@ uvicorn app.main:app --reload
 http://127.0.0.1:8000/docs
 
 
+CURL
+curl -X POST http://localhost:8000/predict \
+  -H "Content-Type: application/json" \
+  -d '{"text":"I absolutely love this product!"}'
+
+Add in requirements.txt
+fastapi
+uvicorn[standard]
+transformers
+torch
+
+
 Add in .dockerignore
 .venv
 __pycache__
