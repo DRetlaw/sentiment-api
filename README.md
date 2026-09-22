@@ -64,5 +64,5 @@ docker build -t sentiment-api .
 
 docker images
 
-
+docker run --rm -p 8000:7860 sentiment-api
 

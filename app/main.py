@@ -68,8 +68,39 @@ def health():
 # Prediction endpoint
 # --------------------------------------------------
 
+# @app.post("/predict")
+# def predict(request: PredictionRequest):
+
+#     start_time = time.time()
+
+#     result = classifier(request.text)[0]
+
+#     latency = time.time() - start_time
+
+#     logger.info(
+#         "prediction | text_length=%d | label=%s | latency_ms=%.2f",
+#         len(request.text),
+#         result["label"],
+#         latency * 1000
+#     )
+
+#     return {
+#         "text": request.text,
+#         "label": result["label"],
+#         "score": result["score"],
+#         "latency_ms": round(latency * 1000, 2)
+#     }
+
+
+request_count = 0
+
+
 @app.post("/predict")
 def predict(request: PredictionRequest):
+
+    global request_count
+
+    request_count += 1
 
     start_time = time.time()
 
@@ -78,15 +109,26 @@ def predict(request: PredictionRequest):
     latency = time.time() - start_time
 
     logger.info(
-        "prediction | text_length=%d | label=%s | latency_ms=%.2f",
+        "prediction | request=%d | text_length=%d | "
+        "label=%s | latency_ms=%.2f",
+        request_count,
         len(request.text),
         result["label"],
         latency * 1000
     )
 
     return {
+        "request_id": request_count,
         "text": request.text,
         "label": result["label"],
         "score": result["score"],
         "latency_ms": round(latency * 1000, 2)
     }
+
+@app.get("/metrics")
+def metrics():
+    return {
+        "total_requests": request_count
+    }
+
+
